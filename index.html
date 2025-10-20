@@ -1,0 +1,505 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Youtooz Inferno Chamber</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;900&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg-color: #0d0202;
+            --card-bg: #1a0404;
+            --border-color: #4d0000;
+            --glow-color: #ff0000;
+            --accent-color: #ff1a1a;
+            --text-color: #f5f5f5;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: var(--bg-color);
+            color: var(--text-color);
+        }
+
+        #particle-canvas {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+        }
+        
+        #preloader {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: var(--bg-color);
+            z-index: 1000;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: opacity 0.5s ease-out;
+        }
+        .spinner {
+            width: 50px;
+            height: 50px;
+            border: 5px solid var(--border-color);
+            border-top-color: var(--accent-color);
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+        }
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+
+        .figure-card {
+            background-color: var(--card-bg);
+            border: 1px solid var(--border-color);
+            transition: transform 0.3s ease, box-shadow 0.3s ease, border-color 0.3s ease;
+        }
+        .figure-card:hover {
+            transform: translateY(-12px) scale(1.02);
+            box-shadow: 0 20px 40px rgba(255, 0, 0, 0.35);
+            border-color: var(--accent-color);
+        }
+
+        .modal-backdrop {
+            background-color: rgba(13, 2, 2, 0.8);
+            backdrop-filter: blur(12px);
+        }
+
+        .status-dot {
+            width: 8px;
+            height: 8px;
+            background-color: var(--accent-color);
+            border-radius: 50%;
+            animation: pulse-red 1.5s infinite;
+        }
+        @keyframes pulse-red {
+            0% { box-shadow: 0 0 0 0 rgba(255, 26, 26, 0.7); }
+            70% { box-shadow: 0 0 0 10px rgba(255, 26, 26, 0); }
+            100% { box-shadow: 0 0 0 0 rgba(255, 26, 26, 0); }
+        }
+
+        .countdown-timer {
+            background: linear-gradient(to right, #2a0d0d, #1a0404);
+            color: var(--accent-color);
+            text-shadow: 0 0 8px rgba(255, 26, 26, 0.7);
+        }
+        
+        .gradient-button-claim {
+            background-image: linear-gradient(to right, #ff3b3b, #ff0000);
+            transition: all 0.3s ease;
+            color: var(--text-color);
+            border: 1px solid #ff4d4d;
+        }
+        .gradient-button-claim:hover {
+            box-shadow: 0 0 25px rgba(255, 0, 0, 0.7);
+            transform: scale(1.05);
+        }
+        .select-btn {
+             background-color: var(--accent-color);
+             color: var(--text-color);
+        }
+        .select-btn:hover{
+            background-color: #ff3333;
+        }
+        
+        .figure-img-container {
+            width: 100%;
+            padding-bottom: 100%; /* Square aspect ratio */
+            position: relative;
+        }
+        .figure-img-container img {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+        /* Custom Radio Button Styles */
+        .social-radio input[type="radio"] {
+            display: none;
+        }
+        .social-radio label {
+            cursor: pointer;
+            padding: 8px;
+            border-radius: 8px;
+            border: 2px solid var(--border-color);
+            transition: all 0.2s ease-in-out;
+            background-color: #2a0d0d;
+        }
+        .social-radio input[type="radio"]:checked + label {
+            background-color: var(--accent-color);
+            border-color: var(--glow-color);
+            transform: scale(1.1);
+        }
+    </style>
+</head>
+<body class="antialiased flex flex-col min-h-screen">
+
+    <div id="preloader">
+        <div class="spinner"></div>
+    </div>
+
+    <canvas id="particle-canvas"></canvas>
+
+    <!-- Main Container -->
+    <div class="container mx-auto px-4 py-8 flex-grow">
+        
+        <!-- Header Section -->
+        <header class="mb-10">
+            <h1 class="text-center text-3xl md:text-4xl font-bold text-white mb-6" style="text-shadow: 0 0 15px var(--glow-color);">Youtooz™ <span class="text-gray-400">Inferno Chamber</span></h1>
+            <div class="max-w-4xl mx-auto bg-black/30 border border-[#4d0000] rounded-2xl p-4 shadow-xl backdrop-blur-sm">
+                <div class="flex flex-col md:flex-row items-center justify-between gap-4 text-sm">
+                    <!-- Live Stats -->
+                    <div class="flex items-center gap-4">
+                        <div class="flex items-center space-x-2">
+                            <div class="status-dot"></div>
+                            <span id="online-users" class="font-bold text-white">1,482</span>
+                            <span class="text-gray-400">Online</span>
+                        </div>
+                        <div class="border-l border-gray-700 h-6"></div>
+                        <div class="flex items-center space-x-2">
+                            <svg class="w-5 h-5 text-yellow-400" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"></path></svg>
+                            <span id="total-winners" class="font-bold text-white">8,317</span>
+                             <span class="text-gray-400">Winners</span>
+                        </div>
+                    </div>
+                    <!-- Winner Testimonials -->
+                    <div id="testimonial-container" class="testimonial-container text-center md:text-right">
+                        <span class="italic text-gray-300">"Got my Stonks figure! Legit!"</span>
+                        <span class="font-semibold text-white ml-2">- GamerPro123</span>
+                    </div>
+                </div>
+            </div>
+        </header>
+
+        <!-- Figures Grid Section -->
+        <main id="figures-grid" class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
+            <!-- Figure cards will be dynamically inserted here -->
+        </main>
+
+    </div>
+
+    <!-- Footer Section -->
+    <footer class="text-center py-6 mt-8">
+        <div class="text-sm text-gray-500">
+            <span>&copy; 2023 Youtooz Claim Center. All Rights Reserved.</span>
+            <span class="mx-2">|</span>
+            <a href="mailto:contact@youtoozclaimcenter.com" class="hover:text-red-400 transition-colors">Contact Us</a>
+        </div>
+    </footer>
+
+
+    <!-- Modal Section -->
+    <div id="claim-modal" class="fixed inset-0 z-50 flex items-center justify-center p-4 modal-backdrop hidden">
+        <div id="modal-content" class="bg-[var(--card-bg)] border border-[var(--border-color)] rounded-2xl shadow-2xl w-full max-w-sm mx-auto p-6 transform transition-all duration-300 scale-95 opacity-0">
+            
+            <div class="text-center">
+                <img id="modal-figure-image" src="" alt="Selected Figure" class="rounded-lg w-32 h-32 mx-auto mb-4 shadow-lg border-2 border-[var(--accent-color)]">
+                <h2 id="modal-figure-name" class="text-2xl font-bold text-white">Figure Name</h2>
+                <p id="modal-figure-desc" class="text-sm text-gray-400 mt-2 mb-4">A short description of the figure.</p>
+
+                <div class="bg-[var(--bg-color)] p-4 rounded-lg mb-5">
+                     <p class="text-base font-semibold text-white">To receive your <span class="font-bold text-[var(--accent-color)]">FREE</span> figure, you must complete the verification offer.</p>
+                </div>
+               
+                <form id="claim-form">
+                    <div class="mb-4 text-left">
+                        <label class="block text-sm font-medium text-gray-300 mb-2">Select Platform & Enter ID</label>
+                        <div class="flex justify-center space-x-4 mb-3 social-radio">
+                            <!-- Discord -->
+                            <div class="flex items-center">
+                                <input type="radio" id="discord" name="platform" value="Discord" checked>
+                                <label for="discord" title="Discord">
+                                    <svg class="w-6 h-6 text-white" fill="currentColor" viewBox="0 0 24 24"><path d="M20.317 4.36981C18.7965 3.65731 17.1685 3.13831 15.4745 2.82531C15.424 2.91881 15.372 3.01381 15.322 3.10731C13.8445 2.77431 12.3025 2.61731 10.732 2.61731C9.1615 2.61731 7.6195 2.77431 6.142 3.10731C6.092 3.01381 6.0395 2.91881 5.9895 2.82531C4.2955 3.13831 2.668 3.65731 1.147 4.36981C0.2525 6.13581 -0.0595 7.95531 0.001 9.78081C0.2975 14.2863 3.314 17.7828 7.3735 18.9413C7.915 18.6383 8.423 18.2943 8.883 17.9113C8.2865 17.6368 7.728 17.3103 7.209 16.9383C7.1185 16.8668 7.032 16.7908 6.9495 16.7118C6.9455 16.7073 6.9415 16.7028 6.938 16.6983C4.842 15.4323 3.5285 13.2188 3.2355 10.7493C3.253 10.6698 3.272 10.5903 3.2925 10.5108C3.3145 10.4358 3.332 10.3563 3.3515 10.2783C3.369 10.2048 3.3855 10.1298 3.4045 10.0563C4.544 10.7818 5.869 11.2323 7.2795 11.3933C7.4225 10.8413 7.535 10.2833 7.6205 9.72231C9.643 8.24831 11.4515 8.22331 13.2515 9.72231C13.337 10.2833 13.449 10.8413 13.592 11.3933C15.0025 11.2323 16.3275 10.7818 17.467 10.0563C17.4855 10.1298 17.502 10.2048 17.5195 10.2783C17.539 10.3563 17.5565 10.4358 17.5785 10.5108C17.599 10.5903 17.618 10.6698 17.6355 10.7493C17.3425 13.2188 16.029 15.4323 13.9335 16.6983C13.9295 16.7028 13.926 16.7073 13.922 16.7118C13.839 16.7908 13.753 16.8668 13.6625 16.9383C13.1435 17.3103 12.585 17.6368 11.9885 17.9113C12.4485 18.2943 12.9565 18.6383 13.498 18.9413C17.5575 17.7828 20.574 14.2863 20.8705 9.78081C20.932 7.95531 20.62 6.13581 19.7255 4.36981H20.317Z"/></svg>
+                                </label>
+                            </div>
+                            <!-- Twitter -->
+                            <div class="flex items-center">
+                                <input type="radio" id="twitter" name="platform" value="Twitter">
+                                <label for="twitter" title="Twitter/X">
+                                    <svg class="w-6 h-6 text-white" fill="currentColor" viewBox="0 0 24 24"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg>
+                                </label>
+                            </div>
+                            <!-- TikTok -->
+                            <div class="flex items-center">
+                                <input type="radio" id="tiktok" name="platform" value="TikTok">
+                                <label for="tiktok" title="TikTok">
+                                    <svg class="w-6 h-6 text-white" fill="currentColor" viewBox="0 0 24 24"><path d="M12.525.02c1.31-.02 2.61-.01 3.91-.02.08 1.53.63 3.09 1.75 4.17 1.12 1.11 2.7 1.62 4.24 1.79v4.03c-1.44-.05-2.89-.35-4.2-.97-.57-.26-1.1-.59-1.62-.93-.01 2.92.01 5.84-.02 8.75-.08 1.4-.54 2.79-1.35 3.94-1.31 1.92-3.58 3.17-5.91 3.21-2.43.05-4.84-.95-6.43-2.8-1.59-1.87-2.16-4.2-1.8-6.51.41-2.69 2.51-4.81 5.01-5.63.02-1.18-.01-2.36.01-3.53-.27-.02-.53-.01-.8-.02-1.29-.01-2.58-.02-3.87-.02.11-1.71.69-3.4 1.77-4.62 1.08-1.22 2.56-1.95 4.17-2.15z"/></svg>
+                                </label>
+                            </div>
+                        </div>
+                        <input type="text" id="username" name="username" placeholder="YourDiscord#1234" required class="w-full bg-gray-800 border border-gray-600 rounded-lg px-3 py-2 text-white focus:outline-none focus:ring-2 focus:ring-[var(--accent-color)]">
+                    </div>
+                    <button type="submit" class="w-full font-bold py-3 px-4 rounded-lg gradient-button-claim">
+                        Claim & Verify Now
+                    </button>
+                </form>
+            </div>
+             <div id="success-message" class="mt-4 text-center text-green-400 hidden">
+                <p class="font-bold">Success! Redirecting to verification...</p>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            // --- Preloader ---
+            const preloader = document.getElementById('preloader');
+            window.addEventListener('load', () => {
+                preloader.style.opacity = '0';
+                setTimeout(() => {
+                    preloader.style.display = 'none';
+                }, 500);
+            });
+
+            // --- Particle Canvas ---
+            const canvas = document.getElementById('particle-canvas');
+            const ctx = canvas.getContext('2d');
+            canvas.width = window.innerWidth;
+            canvas.height = window.innerHeight;
+            let particlesArray;
+
+            class Particle {
+                constructor(x, y, directionX, directionY, size, color) {
+                    this.x = x; this.y = y; this.directionX = directionX; this.directionY = directionY;
+                    this.size = size; this.color = color;
+                }
+                draw() {
+                    ctx.beginPath(); ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2, false);
+                    ctx.fillStyle = this.color; ctx.fill();
+                }
+                update() {
+                    if (this.x > canvas.width || this.x < 0) this.directionX = -this.directionX;
+                    if (this.y > canvas.height || this.y < 0) this.directionY = -this.directionY;
+                    this.x += this.directionX; this.y += this.directionY;
+                    this.draw();
+                }
+            }
+
+            function initParticles() {
+                particlesArray = [];
+                let numberOfParticles = (canvas.height * canvas.width) / 15000;
+                for (let i = 0; i < numberOfParticles; i++) {
+                    let size = (Math.random() * 2) + 1;
+                    let x = (Math.random() * ((innerWidth - size * 2) - (size * 2)) + size * 2);
+                    let y = (Math.random() * ((innerHeight - size * 2) - (size * 2)) + size * 2);
+                    let directionX = (Math.random() * 0.4) - 0.2;
+                    let directionY = (Math.random() * 0.4) - 0.2;
+                    let color = 'rgba(255, 0, 0, 0.6)';
+                    particlesArray.push(new Particle(x, y, directionX, directionY, size, color));
+                }
+            }
+
+            function connectParticles() {
+                let opacityValue = 1;
+                for (let a = 0; a < particlesArray.length; a++) {
+                    for (let b = a; b < particlesArray.length; b++) {
+                        let distance = ((particlesArray[a].x - particlesArray[b].x) * (particlesArray[a].x - particlesArray[b].x)) +
+                                       ((particlesArray[a].y - particlesArray[b].y) * (particlesArray[a].y - particlesArray[b].y));
+                        if (distance < (canvas.width / 7) * (canvas.height / 7)) {
+                            opacityValue = 1 - (distance / 20000);
+                            ctx.strokeStyle = `rgba(255, 0, 0, ${opacityValue})`;
+                            ctx.lineWidth = 1; ctx.beginPath();
+                            ctx.moveTo(particlesArray[a].x, particlesArray[a].y);
+                            ctx.lineTo(particlesArray[b].x, particlesArray[b].y); ctx.stroke();
+                        }
+                    }
+                }
+            }
+
+            function animateParticles() {
+                requestAnimationFrame(animateParticles);
+                ctx.clearRect(0, 0, innerWidth, innerHeight);
+                for (let i = 0; i < particlesArray.length; i++) {
+                    particlesArray[i].update();
+                }
+                connectParticles();
+            }
+
+            window.addEventListener('resize', () => {
+                canvas.width = innerWidth; canvas.height = innerHeight;
+                initParticles();
+            });
+
+            initParticles();
+            animateParticles();
+
+            // --- Figure and Modal Logic ---
+            const figures = [
+                 { name: 'Technoblade', imageUrl: 'https://images.stockx.com/images/Youtooz-Technoblade-Vinyl-Figure-Blood-God-2.jpg', price: 99.99, desc: 'The legendary Blood God. A tribute to the king and a true collector\'s grail.' },
+                { name: 'Stonks', imageUrl: 'https://i.ebayimg.com/images/g/YScAAOSwpeNgw5fz/s-l1600.jpg', price: 99.99, desc: 'The original meme of infinite gains. A must-have for any serious collection.' },
+                { name: 'Springtrap (FNAF)', imageUrl: 'https://thecardvault.co.uk/cdn/shop/products/youtooz-five-nights-at-freddy-s-springtrap-vinyl-figure-14-the-card-vault-1.webp', price: 99.99, desc: 'The terrifying animatronic from FNAF. A true horror icon and a fan favorite.' },
+                { name: 'Astarion (Baldur\'s Gate 3)', imageUrl: 'https://cdn.hmv.com/r/w-640/hmv/files/c5/c53aefe0-42bb-44eb-932c-ebcccca07c15.png', price: 99.99, desc: 'The charismatic vampire spawn from Baldur\'s Gate 3. A breakout character of the year.' },
+                { name: 'Alastor (Hazbin Hotel)', imageUrl: 'https://i.ebayimg.com/images/g/d2cAAOSwye9nt3Sd/s-l500.png', price: 99.99, desc: 'The powerful Radio Demon from Hazbin Hotel. Sinfully delightful and highly sought after.' },
+                { name: 'Sung Jinwoo (Solo Leveling)', imageUrl: 'https://store.crunchyroll.com/on/demandware.static/-/Sites-crunchyroll-master-catalog/default/dw0c5385f9/images/810140783264_solo-leveling-sung-jin-woo-youtooz-vinyl-figure_2.jpg', price: 99.99, desc: 'The Shadow Monarch arises. The ultimate hunter from the global hit, Solo Leveling.' },
+                { name: 'Caseoh', imageUrl: 'https://www.coleka.com/media/item/202406/12/youtooz-caseoh.webp', price: 99.99, desc: 'The one and only. A heavyweight in the streaming world, captured in vinyl form.' },
+                { name: 'Meg Griffin (Family Guy)', imageUrl: 'https://i5.walmartimages.com/seo/Youtooz-Hot-Meg-Family-Guy-Figure-4-6-Collectible-Youtooz-Meg-Griffin-Vinyl-Figure-from-Youtooz-Family-Guy-Collection-Hot-Meg-4-6-inch_ec7e8ed3-b5b7-4d72-92ac-7675e75be11c.4aa6fe23842aa1cd6bbf693f3120084d.jpeg', price: 99.99, desc: 'The iconic, often overlooked, star of Family Guy. A classic pop culture piece.' }
+            ];
+
+            const testimonials = [
+                { author: "GamerPro123", text: "\"Got my Stonks figure! Legit!\"" },
+                { author: "Alex_W", text: "\"I have a Technoblade grail!\"" },
+                { author: "Sarah_K", text: "\"Verification was super quick.\"" },
+                { author: "Mike_R", text: "\"Finally got Alastor! So easy.\""}
+            ];
+            let currentTestimonialIndex = 0;
+
+            const grid = document.getElementById('figures-grid');
+            const modal = document.getElementById('claim-modal');
+            const modalContent = document.getElementById('modal-content');
+            const claimForm = document.getElementById('claim-form');
+            const successMessage = document.getElementById('success-message');
+            const onlineUsersEl = document.getElementById('online-users');
+            const totalWinnersEl = document.getElementById('total-winners');
+            const testimonialContainer = document.getElementById('testimonial-container');
+            const usernameInput = document.getElementById('username');
+            const platformRadios = document.querySelectorAll('input[name="platform"]');
+
+            const placeholders = {
+                Discord: 'YourDiscord#1234',
+                Twitter: '@YourTwitterHandle',
+                TikTok: '@YourTikTokHandle'
+            };
+
+            platformRadios.forEach(radio => {
+                radio.addEventListener('change', (event) => {
+                    usernameInput.placeholder = placeholders[event.target.value];
+                });
+            });
+
+            function displayFigures() {
+                grid.innerHTML = '';
+                figures.forEach((figure) => {
+                    const card = document.createElement('div');
+                    card.className = 'figure-card rounded-2xl p-4 flex flex-col text-center';
+                    
+                    const endTime = new Date().getTime() + (Math.random() * (24 - 6) + 6) * 60 * 60 * 1000;
+
+                    card.innerHTML = `
+                        <div class="figure-img-container rounded-lg mb-4 overflow-hidden">
+                           <img src="${figure.imageUrl}" alt="${figure.name}" onerror="this.onerror=null;this.src='https.placehold.co/400x400/1A202C/FFFFFF?text=Image+Error';">
+                        </div>
+                        <h3 class="font-bold text-lg text-white mb-2 flex-grow">${figure.name}</h3>
+                        <div class="my-2">
+                            <span class="text-xl text-gray-500 line-through">$${figure.price.toFixed(2)}</span>
+                            <span class="text-2xl font-bold text-[var(--accent-color)] ml-2">$0.00</span>
+                        </div>
+                        <div class="countdown-timer text-lg font-bold p-2 rounded-lg my-3" data-end-time="${endTime}">
+                            23:59:59
+                        </div>
+                        <button class="select-btn w-full mt-auto font-bold py-2 px-4 rounded-lg transition-colors">
+                            Claim Free
+                        </button>
+                    `;
+                    card.querySelector('.select-btn').addEventListener('click', () => openModal(figure));
+                    grid.appendChild(card);
+                });
+            }
+
+            function openModal(figure) {
+                document.getElementById('modal-figure-name').textContent = figure.name;
+                document.getElementById('modal-figure-image').src = figure.imageUrl;
+                document.getElementById('modal-figure-desc').textContent = figure.desc;
+                claimForm.reset();
+                document.getElementById('discord').checked = true;
+                usernameInput.placeholder = placeholders.Discord;
+                successMessage.classList.add('hidden');
+                claimForm.style.display = 'block';
+
+                modal.classList.remove('hidden');
+                setTimeout(() => modalContent.classList.remove('scale-95', 'opacity-0'), 10);
+            }
+
+            function closeModal() {
+                modalContent.classList.add('scale-95', 'opacity-0');
+                setTimeout(() => modal.classList.add('hidden'), 300);
+            }
+            
+            function updateTimers() {
+                 const timers = document.querySelectorAll('.countdown-timer');
+                timers.forEach(timer => {
+                    const endTime = parseInt(timer.getAttribute('data-end-time'));
+                    const now = new Date().getTime();
+                    const distance = endTime - now;
+
+                    if (distance < 0) {
+                        timer.innerHTML = "EXPIRED";
+                        const button = timer.closest('.figure-card').querySelector('.select-btn');
+                        if (button) {
+                           button.disabled = true;
+                           button.classList.add('opacity-50', 'cursor-not-allowed');
+                        }
+                        return;
+                    }
+
+                    const hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+                    const minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
+                    const seconds = Math.floor((distance % (1000 * 60)) / 1000);
+
+                    timer.innerHTML = `${String(hours).padStart(2, '0')}:${String(minutes).padStart(2, '0')}:${String(seconds).padStart(2, '0')}`;
+                });
+            }
+
+            function updateLiveCounters() {
+                let online = parseInt(onlineUsersEl.textContent.replace(/,/g, ''));
+                online += Math.floor(Math.random() * 7) - 3;
+                if (online < 1200) online = 1200;
+                onlineUsersEl.textContent = online.toLocaleString();
+
+                if (Math.random() < 0.05) {
+                    let winners = parseInt(totalWinnersEl.textContent.replace(/,/g, ''));
+                    winners += 1;
+                    totalWinnersEl.textContent = winners.toLocaleString();
+                }
+            }
+
+            function updateTestimonial() {
+                testimonialContainer.style.opacity = 0;
+                setTimeout(() => {
+                    currentTestimonialIndex = (currentTestimonialIndex + 1) % testimonials.length;
+                    const testimonial = testimonials[currentTestimonialIndex];
+                    testimonialContainer.innerHTML = `
+                        <span class="italic text-gray-300">${testimonial.text}</span>
+                        <span class="font-semibold text-white ml-2">- ${testimonial.author}</span>
+                    `;
+                    testimonialContainer.style.opacity = 1;
+                }, 500);
+            }
+            
+            modal.addEventListener('click', (e) => (e.target === modal) && closeModal());
+            claimForm.addEventListener('submit', (e) => {
+                e.preventDefault();
+                const selectedPlatform = document.querySelector('input[name="platform"]:checked').value;
+                console.log('Claim Submitted:', { platform: selectedPlatform, id: usernameInput.value });
+                
+                claimForm.style.display = 'none';
+                successMessage.classList.remove('hidden');
+
+                setTimeout(() => {
+                    window.location.href = 'https://lockedapp.org/cl/i/1o468e'; 
+                    console.log("Redirecting to verification wall...");
+                    closeModal();
+                }, 2000);
+            });
+
+            // Initial Load & Intervals
+            displayFigures();
+            setInterval(updateTimers, 1000);
+            setInterval(updateLiveCounters, 2500);
+            setInterval(updateTestimonial, 6000);
+        });
+    </script>
+</body>
+</html>
+
+
