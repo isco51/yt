@@ -1,537 +1,215 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" dir="ltr">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Youtooz Inferno Chamber</title>
+    <title>Nintendo Switch 2 Giveaway - Win Yours Today!</title>
     <script src="https://cdn.tailwindcss.com"></script>
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;900&display=swap" rel="stylesheet">
-    
-    <!-- Popunder Ad Script -->
-    <script type='text/javascript' src='//pl27886534.effectivegatecpm.com/21/7a/d3/217ad35d0eba4831485d698e8fdeb614.js'></script>
-
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;700;900&display=swap" rel="stylesheet">
     <style>
-        :root {
-            --bg-color: #0d0202;
-            --card-bg: #1a0404;
-            --border-color: #4d0000;
-            --glow-color: #ff0000;
-            --accent-color: #ff1a1a;
-            --text-color: #f5f5f5;
-        }
-
         body {
             font-family: 'Inter', sans-serif;
-            background-color: var(--bg-color);
-            color: var(--text-color);
         }
-
-        #particle-canvas {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            z-index: -1;
-        }
-        
-        #preloader {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background-color: var(--bg-color);
-            z-index: 1000;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            transition: opacity 0.5s ease-out;
-        }
-        .spinner {
-            width: 50px;
-            height: 50px;
-            border: 5px solid var(--border-color);
-            border-top-color: var(--accent-color);
-            border-radius: 50%;
-            animation: spin 1s linear infinite;
-        }
-        @keyframes spin {
-            to { transform: rotate(360deg); }
-        }
-
-        .figure-card {
-            background-color: var(--card-bg);
-            border: 1px solid var(--border-color);
-            transition: transform 0.3s ease, box-shadow 0.3s ease, border-color 0.3s ease;
-        }
-        .figure-card:hover {
-            transform: translateY(-12px) scale(1.02);
-            box-shadow: 0 20px 40px rgba(255, 0, 0, 0.35);
-            border-color: var(--accent-color);
-        }
-
-        .modal-backdrop {
-            background-color: rgba(13, 2, 2, 0.8);
-            backdrop-filter: blur(12px);
-        }
-
-        .status-dot {
-            width: 8px;
-            height: 8px;
-            background-color: var(--accent-color);
-            border-radius: 50%;
-            animation: pulse-red 1.5s infinite;
-        }
-        @keyframes pulse-red {
-            0% { box-shadow: 0 0 0 0 rgba(255, 26, 26, 0.7); }
-            70% { box-shadow: 0 0 0 10px rgba(255, 26, 26, 0); }
-            100% { box-shadow: 0 0 0 0 rgba(255, 26, 26, 0); }
-        }
-
-        .countdown-timer {
-            background: linear-gradient(to right, #2a0d0d, #1a0404);
-            color: var(--accent-color);
-            text-shadow: 0 0 8px rgba(255, 26, 26, 0.7);
-        }
-        
-        .gradient-button-claim {
-            background-image: linear-gradient(to right, #ff3b3b, #ff0000);
+        .cta-button {
             transition: all 0.3s ease;
-            color: var(--text-color);
-            border: 1px solid #ff4d4d;
+            box-shadow: 0 4px 15px rgba(239, 68, 68, 0.4);
         }
-        .gradient-button-claim:hover {
-            box-shadow: 0 0 25px rgba(255, 0, 0, 0.7);
-            transform: scale(1.05);
+        .cta-button:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 6px 20px rgba(239, 68, 68, 0.6);
         }
-        .select-btn {
-             background-color: var(--accent-color);
-             color: var(--text-color);
+        .pulse-dot {
+            animation: pulse 2s infinite;
         }
-        .select-btn:hover{
-            background-color: #ff3333;
+        @keyframes pulse {
+            0% { box-shadow: 0 0 0 0 rgba(34, 197, 94, 0.7); }
+            70% { box-shadow: 0 0 0 10px rgba(34, 197, 94, 0); }
+            100% { box-shadow: 0 0 0 0 rgba(34, 197, 94, 0); }
         }
-        
-        .figure-img-container {
-            width: 100%;
-            padding-bottom: 100%; /* Square aspect ratio */
-            position: relative;
+        #countdown div {
+            background: rgba(0,0,0,0.2);
+            padding: 0.5rem 1rem;
+            border-radius: 0.5rem;
+            border: 1px solid rgba(255,255,255,0.1);
         }
-        .figure-img-container img {
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
-        }
-        /* Custom Radio Button Styles */
-        .social-radio input[type="radio"] {
-            display: none;
-        }
-        .social-radio label {
-            cursor: pointer;
-            padding: 8px;
-            border-radius: 8px;
-            border: 2px solid var(--border-color);
-            transition: all 0.2s ease-in-out;
-            background-color: #2a0d0d;
-        }
-        .social-radio input[type="radio"]:checked + label {
-            background-color: var(--accent-color);
-            border-color: var(--glow-color);
-            transform: scale(1.1);
-        }
+        .modal-enter { animation: fadeIn 0.3s ease-out; }
+        .modal-leave { animation: fadeOut 0.3s ease-in; }
+        @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+        @keyframes fadeOut { from { opacity: 1; } to { opacity: 0; } }
     </style>
 </head>
-<body class="antialiased flex flex-col min-h-screen">
+<body class="bg-gray-900 text-white">
 
-    <div id="preloader">
-        <div class="spinner"></div>
-    </div>
-
-    <canvas id="particle-canvas"></canvas>
-
-    <!-- Main Container -->
-    <div class="container mx-auto px-4 py-8 flex-grow">
+    <!-- Hero Section -->
+    <section class="bg-gradient-to-b from-gray-900 to-black min-h-screen flex flex-col items-center justify-center p-6 text-center">
         
-        <!-- Header Section -->
-        <header class="mb-10">
-            <h1 class="text-center text-3xl md:text-4xl font-bold text-white mb-6" style="text-shadow: 0 0 15px var(--glow-color);">Youtooz™ <span class="text-gray-400">Inferno Chamber</span></h1>
-            <div class="max-w-4xl mx-auto bg-black/30 border border-[#4d0000] rounded-2xl p-4 shadow-xl backdrop-blur-sm">
-                <div class="flex flex-col md:flex-row items-center justify-between gap-4 text-sm">
-                    <!-- Live Stats -->
-                    <div class="flex items-center gap-4">
-                        <div class="flex items-center space-x-2">
-                            <div class="status-dot"></div>
-                            <span id="online-users" class="font-bold text-white">1,482</span>
-                            <span class="text-gray-400">Online</span>
-                        </div>
-                        <div class="border-l border-gray-700 h-6"></div>
-                        <div class="flex items-center space-x-2">
-                            <svg class="w-5 h-5 text-yellow-400" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"></path></svg>
-                            <span id="total-winners" class="font-bold text-white">8,317</span>
-                             <span class="text-gray-400">Winners</span>
-                        </div>
-                    </div>
-                    <!-- Winner Testimonials -->
-                    <div id="testimonial-container" class="testimonial-container text-center md:text-right">
-                        <span class="italic text-gray-300">"Got my Stonks figure! Legit!"</span>
-                        <span class="font-semibold text-white ml-2">- GamerPro123</span>
-                    </div>
+        <img src="https://cdn.spaziogames.it/storage/media/2025/04/27227/Giveaway-Nintendo-Switch-2-Instant-Gaming.jpg?width=896&height=503.53333333333" 
+             alt="Nintendo Switch 2 Giveaway" 
+             class="max-w-2xl w-full mx-auto mb-8 rounded-lg shadow-2xl"
+             onerror="this.onerror=null;this.src='https://placehold.co/896x504/ef4444/ffffff?text=Image+Not+Found';">
+
+        <div class="bg-black bg-opacity-20 p-8 rounded-2xl w-full max-w-3xl">
+            <h1 class="text-4xl md:text-6xl font-black uppercase tracking-wider text-shadow-lg">
+                <span class="text-red-500">Win Your</span> Nintendo Switch 2
+            </h1>
+            <p class="mt-4 text-lg md:text-xl text-gray-300 max-w-2xl mx-auto">
+                The next generation of gaming is here. Be one of the first to own the revolutionary Nintendo Switch 2. Enter the official giveaway!
+            </p>
+            
+            <div id="countdown-container" class="my-6">
+                <h3 class="text-lg font-semibold text-red-400 mb-3">This Month's Giveaway Ends In:</h3>
+                <div id="countdown" class="flex justify-center gap-3 md:gap-6 text-white">
+                    <div><span id="days" class="text-3xl md:text-4xl font-bold">00</span><span class="block text-xs text-gray-400">Days</span></div>
+                    <div><span id="hours" class="text-3xl md:text-4xl font-bold">00</span><span class="block text-xs text-gray-400">Hours</span></div>
+                    <div><span id="minutes" class="text-3xl md:text-4xl font-bold">00</span><span class="block text-xs text-gray-400">Minutes</span></div>
+                    <div><span id="seconds" class="text-3xl md:text-4xl font-bold">00</span><span class="block text-xs text-gray-400">Seconds</span></div>
                 </div>
             </div>
-        </header>
 
-        <!-- Figures Grid Section -->
-        <main id="figures-grid" class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
-            <!-- Figure cards will be dynamically inserted here -->
-        </main>
+            <div>
+                <label for="contact-id" class="block text-md text-gray-300 mb-2">Enter your Gaming or Social Username to be contacted:</label>
+                <div class="flex flex-col sm:flex-row gap-2 justify-center">
+                    <input type="text" id="contact-id" name="contact-id" class="bg-gray-800 text-white border-2 border-gray-600 rounded-full py-3 px-6 w-full sm:w-auto flex-grow focus:outline-none focus:border-red-500 transition" placeholder="e.g., YourDiscord#1234 or @YourTwitter">
+                    <button id="main-cta-button" class="cta-button inline-block bg-red-600 text-white font-bold text-lg py-3 px-8 rounded-full uppercase tracking-widest hover:bg-red-700 whitespace-nowrap">
+                        Enter Now!
+                    </button>
+                </div>
+                <!-- Social Icons -->
+                <div class="flex justify-center items-center gap-4 mt-4">
+                    <svg class="w-6 h-6 text-gray-500" role="img" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" fill="currentColor"><title>Discord</title><path d="M20.317 4.3698a19.7913 19.7913 0 00-4.8851-1.5152.0741.0741 0 00-.0785.0371c-.211.3753-.4447.8648-.6083 1.2495-1.8447-.2762-3.68-.2762-5.4868 0-.1636-.3847-.3973-.8742-.6083-1.2495a.0741.0741 0 00-.0785-.0371 19.7363 19.7363 0 00-4.8851 1.5152.069.069 0 00-.0321.0256C.5334 9.0458-.319 13.5799.0992 18.0578a.0824.0824 0 00.0321.053c1.8026 1.0239 3.6234 1.5652 5.4442 1.8615a.0741.0741 0 00.0864-.0492c.302-.6347.5752-1.298.7992-1.9806a.0741.0741 0 00-.0446-.0864c-.46-.1636-.899-.3592-1.311-.5806a.0741.0741 0 00-.0864.011c-.1197.0864-.2315.1807-.3354.2762a.0741.0741 0 00.011.1197c2.1016 1.1512 4.5629 1.1512 6.6269 0a.0741.0741 0 00.011-.1197c-.1039-.0955-.2157-.1898-.3354-.2762a.0741.0741 0 00-.0864-.011c-.412.2214-.851.417-1.311.5806a.0741.0741 0 00-.0446.0864c.224.6826.4972 1.3459.7992 1.9806a.0741.0741 0 00.0864.0492c1.8208-.2963 3.6416-.8376 5.4442-1.8615a.0824.0824 0 00.0321-.053c.5-4.3887-.5453-8.921-.5453-8.921a.069.069 0 00-.0321-.0256zM8.02 15.3312c-.8422 0-1.5242-1.0239-1.5242-2.2834 0-1.2595.682-2.2834 1.5242-2.2834.8422 0 1.5242 1.0239 1.5242 2.2834 0 1.2595-.682 2.2834-1.5242 2.2834zm7.9548 0c-.8422 0-1.5242-1.0239-1.5242-2.2834 0-1.2595.682-2.2834 1.5242-2.2834.8422 0 1.5242 1.0239 1.5242 2.2834.0001 1.2595-.682 2.2834-1.5242 2.2834z"/></svg>
+                    <svg class="w-5 h-5 text-gray-500" role="img" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" fill="currentColor"><title>X</title><path d="M18.901 1.153h3.68l-8.04 9.19L24 22.846h-7.406l-5.8-7.584-6.638 7.584H.474l8.6-9.83L0 1.154h7.594l5.243 6.932ZM17.61 20.644h2.039L6.486 3.24H4.298Z"/></svg>
+                    <svg class="w-6 h-6 text-gray-500" role="img" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" fill="currentColor"><title>Instagram</title><path d="M12 0C8.74 0 8.333.015 7.053.072 5.775.132 4.905.333 4.14.63c-.789.306-1.459.717-2.126 1.384S.935 3.35.63 4.14C.333 4.905.131 5.775.072 7.053.012 8.333 0 8.74 0 12s.015 3.667.072 4.947c.06 1.277.261 2.148.558 2.913.306.788.717 1.459 1.384 2.126.667.666 1.336 1.079 2.126 1.384.766.296 1.636.499 2.913.558C8.333 23.988 8.74 24 12 24s3.667-.015 4.947-.072c1.277-.06 2.148-.262 2.913-.558.788-.306 1.459-.718 2.126-1.384.666-.667 1.079-1.335 1.384-2.126.296-.765.499-1.636.558-2.913.06-1.28.072-1.687.072-4.947s-.015-3.667-.072-4.947c-.06-1.277-.262-2.149-.558-2.913-.306-.789-.718-1.459-1.384-2.126C21.319 1.347 20.651.935 19.86.63c-.765-.297-1.636-.499-2.913-.558C15.667.012 15.26 0 12 0zm0 2.16c3.203 0 3.585.016 4.85.071 1.17.055 1.805.249 2.227.415.562.217.96.477 1.382.896.419.42.679.819.896 1.381.164.422.36 1.057.413 2.227.057 1.266.07 1.646.07 4.85s-.015 3.585-.074 4.85c-.06 1.17-.249 1.805-.413 2.227-.217.562-.477.96-.896 1.381-.42.419-.819.679-1.381.896-.422.164-1.057.36-2.227.413-1.266.057-1.646.07-4.85.07s-3.585-.015-4.85-.074c-1.17-.06-1.805-.249-2.227-.413-.562-.217-.96-.477-1.381-.896-.419-.42-.679-.819-.896-1.381-.164-.422-.36-1.057-.413-2.227-.057-1.266-.07-1.646-.07-4.85s.015-3.585.07-4.85c.055-1.17.249-1.805.413-2.227.217-.562.477.96.896-1.381.42-.419.819-.679 1.381-.896.422-.164 1.057-.36 2.227-.413C8.415 2.177 8.797 2.16 12 2.16zm0 9.04c-1.884 0-3.415 1.53-3.415 3.415s1.53 3.415 3.415 3.415 3.415-1.53 3.415-3.415-1.53-3.415-3.415-3.415zm0 5.49c-1.146 0-2.075-.93-2.075-2.075S10.854 9.95 12 9.95s2.075.93 2.075 2.075-.93 2.075-2.075 2.075zm4.905-6.88c-.622 0-1.125.503-1.125 1.125s.503 1.125 1.125 1.125 1.125-.503 1.125-1.125-.503-1.125-1.125-1.125z"/></svg>
+                    <svg class="w-6 h-6 text-gray-500" role="img" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" fill="currentColor"><title>Telegram</title><path d="M11.944 0A12 12 0 0 0 0 12a12 12 0 0 0 12 12 12 12 0 0 0 12-12A12 12 0 0 0 12 0a12 12 0 0 0-.056 0zm4.962 7.224c.1-.002.321.023.465.14a.506.506 0 0 1 .171.325c.016.093.036.306.02.472-.18 1.898-.962 6.502-1.36 8.627-.17.91-.494 1.208-.822 1.23-.696.047-1.225-.46-1.9- .902-1.056-.693-1.653-1.124-2.678-1.8-1.185-.78-.417-1.21.258-1.91.177-.184 3.247-2.977 3.307-3.23.007-.032.014-.15-.056-.212s-.174-.04-.249-.024c-.106.024-1.793 1.14-5.061 3.345-.48.33-.913.49-1.302.48-.428-.008-1.252-.241-1.865-.44-.752-.245-1.349-.374-1.297-.789.027-.216.325-.437.893-.662 3.488-1.353 5.758-2.245 6.62-2.613 2.188-.91 2.968-1.23 3.545-1.25z"/></svg>
+                    <svg class="w-6 h-6 text-gray-500" role="img" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" fill="currentColor"><title>Twitch</title><path d="M11.571 4.714h1.715v5.143H11.57zm4.572 0h1.714v5.143h-1.714zM6 0L1.714 4.286v15.428h5.143V24l4.286-4.286h3.428L22.286 12V0H6zm14.571 11.143-3.428 3.428h-3.429l-3 3v-3H6.857V1.714h13.714v9.429z"/></svg>
+                    <svg class="w-6 h-6 text-gray-500" role="img" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" fill="currentColor"><title>TikTok</title><path d="M12.525.02c1.31-.02 2.61-.01 3.91-.02.08 1.53.63 3.09 1.75 4.17 1.12 1.11 2.7 1.62 4.24 1.79v4.03c-1.44-.05-2.89-.35-4.2-.97-.57-.26-1.1-.59-1.62-.93-.01 2.92.01 5.84-.02 8.75-.08 1.4-.54 2.79-1.35 3.94-1.31 1.92-3.58 3.17-5.91 3.21-2.43.05-4.84-.95-6.43-2.88-1.59-1.93-2.23-4.5-1.96-6.91.24-2.11 1.1-4.1 2.6-5.62 1.5-1.52 3.4-2.43 5.5-2.51.08 1.55.63 3.1 1.75 4.17 1.12 1.11 2.7 1.62 4.24 1.79v4.03c-1.44-.05-2.89-.35-4.2-.97-.57-.26-1.1-.59-1.62-.93-.01 2.92.01 5.84-.02 8.75-.08 1.4-.54 2.79-1.35 3.94-1.31 1.92-3.58 3.17-5.91 3.21-2.43.05-4.84-.95-6.43-2.88-1.59-1.93-2.23-4.5-1.96-6.91.24-2.11 1.1-4.1 2.6-5.62 1.5-1.52 3.4-2.43 5.5-2.51Z"/></svg>
+                </div>
+                <p class="mt-4 text-sm text-gray-400">Then, complete a short partner offer to confirm your entry.</p>
+            </div>
+        </div>
+    </section>
 
+    <!-- Live Stats & Security Badges -->
+    <section class="bg-gray-800 py-8">
+        <div class="container mx-auto px-6"><div class="grid grid-cols-1 md:grid-cols-3 gap-8 text-center"><div class="bg-gray-700 p-6 rounded-xl"><div class="flex items-center justify-center"><div class="pulse-dot h-3 w-3 bg-green-500 rounded-full mr-3"></div><h3 class="text-2xl font-bold"><span id="online-users">247</span></h3></div><p class="text-gray-400 mt-2">Users Online</p></div><div class="bg-gray-700 p-6 rounded-xl"><h3 class="text-2xl font-bold"><span id="monthly-winners">58</span></h3><p class="text-gray-400 mt-2">Winners This Month</p></div><div class="bg-gray-700 p-6 rounded-xl flex items-center justify-center space-x-4"><div><svg class="w-8 h-8 mx-auto text-green-400" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg><p class="text-sm mt-1 text-gray-300">Verified</p></div><div><svg class="w-8 h-8 mx-auto text-green-400" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"></path></svg><p class="text-sm mt-1 text-gray-300">SSL Secured</p></div></div></div></div>
+    </section>
+
+    <!-- Image Gallery -->
+    <section class="py-16 bg-gray-900">
+        <div class="container mx-auto px-6"><h2 class="text-3xl font-bold text-center mb-10">First Look at the Future of Gaming</h2><div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6"><img src="https://www.nintendo.com/sg/switch2/assets/img/top/switch2_movie_thum.jpg" alt="Switch 2 Official Teaser" class="rounded-lg shadow-lg w-full h-full object-cover" onerror="this.onerror=null;this.src='https://placehold.co/800x450/ef4444/ffffff?text=Image+Not+Found';"><img src="https://static0.gamerantimages.com/wordpress/wp-content/uploads/2024/12/switch.jpg" alt="Switch 2 Lifestyle" class="rounded-lg shadow-lg w-full h-full object-cover" onerror="this.onerror=null;this.src='https://placehold.co/1200x600/ef4444/ffffff?text=Image+Not+Found';"><img src="https://i.redd.it/can28untzhaf1.jpeg" alt="Switch 2 Fan Concept" class="rounded-lg shadow-lg w-full h-full object-cover" onerror="this.onerror=null;this.src='https://placehold.co/1280x720/ef4444/ffffff?text=Image+Not+Found';"></div></div>
+    </section>
+
+    <!-- =============================================================== -->
+    <!-- Ad Slot 1: Native Banner (New Code) -->
+    <!-- =============================================================== -->
+    <section class="py-10 bg-gray-900 flex justify-center">
+        <div class="container mx-auto px-6 text-center">
+            <script async="async" data-cfasync="false" src="//pl27254507.profitableratecpm.com/25822a516a5a48c747d9ad370f7bb2f3/invoke.js"></script>
+            <div id="container-25822a516a5a48c747d9ad370f7bb2f3"></div>
+        </div>
+    </section>
+
+    <!-- Testimonials Section -->
+    <section class="bg-gray-800 py-16">
+        <div class="container mx-auto px-6"><h2 class="text-3xl font-bold text-center mb-10">What Our Winners Say</h2><div class="grid grid-cols-1 md:grid-cols-3 gap-8"><div class="bg-gray-700 p-6 rounded-lg"><p class="text-gray-300">"They contacted me on Discord! I completed a simple gaming survey and a week later the Switch 2 was at my door. This is legit!"</p><div class="flex items-center mt-4"><img class="w-12 h-12 rounded-full object-cover" src="https://placehold.co/100x100/334155/ffffff?text=J" alt="User Avatar"><div class="ml-4"><p class="font-bold">Jessica L.</p><p class="text-sm text-yellow-400">★★★★★</p></div></div></div><div class="bg-gray-700 p-6 rounded-lg"><p class="text-gray-300">"Was skeptical at first, but it's real. My son is so happy with his new Switch 2. Thank you so much!"</p><div class="flex items-center mt-4"><img class="w-12 h-12 rounded-full object-cover" src="https://placehold.co/100x100/334155/ffffff?text=M" alt="User Avatar"><div class="ml-4"><p class="font-bold">Mike T.</p><p class="text-sm text-yellow-400">★★★★★</p></div></div></div><div class="bg-gray-700 p-6 rounded-lg"><p class="text-gray-300">"The process was quick and easy. Got a message on Twitter and confirmed my win. 10/10 would recommend giving it a try."</p><div class="flex items-center mt-4"><img class="w-12 h-12 rounded-full object-cover" src="https://placehold.co/100x100/334155/ffffff?text=S" alt="User Avatar"><div class="ml-4"><p class="font-bold">Sarah P.</p><p class="text-sm text-yellow-400">★★★★★</p></div></div></div></div></div>
+    </section>
+
+    <!-- Final CTA Section -->
+    <section class="bg-gray-900 py-20 text-center">
+        <div class="container mx-auto px-6"><h2 class="text-4xl font-black">Your Chance is NOW!</h2><p class="text-lg text-gray-300 mt-4 max-w-xl mx-auto">Don't wait! Entries are limited and winners are chosen throughout the month. Complete your entry now to secure your spot.</p><div class="mt-8"><a href="https://installchecker.com/cl/i/1o468e" class="cta-button inline-block bg-red-600 text-white font-bold text-xl py-4 px-10 rounded-full uppercase tracking-widest hover:bg-red-700">Confirm My Entry!</a></div></div>
+    </section>
+
+    <!-- =============================================================== -->
+    <!-- Ad Slot 2: 320x50 Banner (New Code) -->
+    <!-- =============================================================== -->
+    <div class="py-6 bg-gray-900 flex justify-center">
+        <script type="text/javascript">
+            atOptions = {
+                'key' : '05b04a59c653df8c42615de25ee399e4',
+                'format' : 'iframe',
+                'height' : 50,
+                'width' : 320,
+                'params' : {}
+            };
+        </script>
+        <script type="text/javascript" src="//www.highperformanceformat.com/05b04a59c653df8c42615de25ee399e4/invoke.js"></script>
     </div>
 
-    <!-- Footer Section -->
-    <footer class="text-center py-6 mt-8">
-        <!-- Banner Ad 300x250 -->
-        <div class="my-6 flex justify-center">
-            <script type="text/javascript">
-                atOptions = {
-                    'key' : '9e046f06081b564b0bafe23f90a3a8ae',
-                    'format' : 'iframe',
-                    'height' : 250,
-                    'width' : 300,
-                    'params' : {}
-                };
-            </script>
-            <script type="text/javascript" src="//www.effectivegatecpm.com/9e046f06081b564b0bafe23f90a3a8ae/invoke.js"></script>
-        </div>
-        
-        <div class="text-sm text-gray-500">
-            <span>&copy; 2023 Youtooz Claim Center. All Rights Reserved.</span>
-            <span class="mx-2">|</span>
-            <a href="mailto:contact@youtoozclaimcenter.com" class="hover:text-red-400 transition-colors">Contact Us</a>
-        </div>
+    <!-- Footer -->
+    <footer class="bg-gray-800 text-center py-6">
+        <p class="text-gray-500 text-sm">&copy; 2024 Switch 2 Promotions. All Rights Reserved.</p><div class="mt-2 space-x-4"><a href="#" class="text-gray-400 hover:text-white text-xs underline">Terms & Conditions</a><a href="#" class="text-gray-400 hover:text-white text-xs underline">Privacy Policy</a></div>
     </footer>
 
-
-    <!-- Modal Section -->
-    <div id="claim-modal" class="fixed inset-0 z-50 flex items-center justify-center p-4 modal-backdrop hidden">
-        <div id="modal-content" class="bg-[var(--card-bg)] border border-[var(--border-color)] rounded-2xl shadow-2xl w-full max-w-sm mx-auto p-6 transform transition-all duration-300 scale-95 opacity-0">
-            
-            <div class="text-center">
-                <img id="modal-figure-image" src="" alt="Selected Figure" class="rounded-lg w-32 h-32 mx-auto mb-4 shadow-lg border-2 border-[var(--accent-color)]">
-                <h2 id="modal-figure-name" class="text-2xl font-bold text-white">Figure Name</h2>
-                <p id="modal-figure-desc" class="text-sm text-gray-400 mt-2 mb-4">A short description of the figure.</p>
-
-                <div class="bg-[var(--bg-color)] p-4 rounded-lg mb-5">
-                     <p class="text-base font-semibold text-white">To receive your <span class="font-bold text-[var(--accent-color)]">FREE</span> figure, you must complete the verification offer.</p>
-                </div>
-               
-                <form id="claim-form">
-                    <div class="mb-4 text-left">
-                        <label class="block text-sm font-medium text-gray-300 mb-2">Select Platform & Enter ID</label>
-                        <div class="flex justify-center space-x-4 mb-3 social-radio">
-                            <!-- Discord -->
-                            <div class="flex items-center">
-                                <input type="radio" id="discord" name="platform" value="Discord" checked>
-                                <label for="discord" title="Discord">
-                                    <svg class="w-6 h-6 text-white" fill="currentColor" viewBox="0 0 24 24"><path d="M20.317 4.36981C18.7965 3.65731 17.1685 3.13831 15.4745 2.82531C15.424 2.91881 15.372 3.01381 15.322 3.10731C13.8445 2.77431 12.3025 2.61731 10.732 2.61731C9.1615 2.61731 7.6195 2.77431 6.142 3.10731C6.092 3.01381 6.0395 2.91881 5.9895 2.82531C4.2955 3.13831 2.668 3.65731 1.147 4.36981C0.2525 6.13581 -0.0595 7.95531 0.001 9.78081C0.2975 14.2863 3.314 17.7828 7.3735 18.9413C7.915 18.6383 8.423 18.2943 8.883 17.9113C8.2865 17.6368 7.728 17.3103 7.209 16.9383C7.1185 16.8668 7.032 16.7908 6.9495 16.7118C6.9455 16.7073 6.9415 16.7028 6.938 16.6983C4.842 15.4323 3.5285 13.2188 3.2355 10.7493C3.253 10.6698 3.272 10.5903 3.2925 10.5108C3.3145 10.4358 3.332 10.3563 3.3515 10.2783C3.369 10.2048 3.3855 10.1298 3.4045 10.0563C4.544 10.7818 5.869 11.2323 7.2795 11.3933C7.4225 10.8413 7.535 10.2833 7.6205 9.72231C9.643 8.24831 11.4515 8.22331 13.2515 9.72231C13.337 10.2833 13.449 10.8413 13.592 11.3933C15.0025 11.2323 16.3275 10.7818 17.467 10.0563C17.4855 10.1298 17.502 10.2048 17.5195 10.2783C17.539 10.3563 17.5565 10.4358 17.5785 10.5108C17.599 10.5903 17.618 10.6698 17.6355 10.7493C17.3425 13.2188 16.029 15.4323 13.9335 16.6983C13.9295 16.7028 13.926 16.7073 13.922 16.7118C13.839 16.7908 13.753 16.8668 13.6625 16.9383C13.1435 17.3103 12.585 17.6368 11.9885 17.9113C12.4485 18.2943 12.9565 18.6383 13.498 18.9413C17.5575 17.7828 20.574 14.2863 20.8705 9.78081C20.932 7.95531 20.62 6.13581 19.7255 4.36981H20.317Z"/></svg>
-                                </label>
-                            </div>
-                            <!-- Twitter -->
-                            <div class="flex items-center">
-                                <input type="radio" id="twitter" name="platform" value="Twitter">
-                                <label for="twitter" title="Twitter/X">
-                                    <svg class="w-6 h-6 text-white" fill="currentColor" viewBox="0 0 24 24"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg>
-                                </label>
-                            </div>
-                            <!-- TikTok -->
-                            <div class="flex items-center">
-                                <input type="radio" id="tiktok" name="platform" value="TikTok">
-                                <label for="tiktok" title="TikTok">
-                                    <svg class="w-6 h-6 text-white" fill="currentColor" viewBox="0 0 24 24"><path d="M12.525.02c1.31-.02 2.61-.01 3.91-.02.08 1.53.63 3.09 1.75 4.17 1.12 1.11 2.7 1.62 4.24 1.79v4.03c-1.44-.05-2.89-.35-4.2-.97-.57-.26-1.1-.59-1.62-.93-.01 2.92.01 5.84-.02 8.75-.08 1.4-.54 2.79-1.35 3.94-1.31 1.92-3.58 3.17-5.91 3.21-2.43.05-4.84-.95-6.43-2.8-1.59-1.87-2.16-4.2-1.8-6.51.41-2.69 2.51-4.81 5.01-5.63.02-1.18-.01-2.36.01-3.53-.27-.02-.53-.01-.8-.02-1.29-.01-2.58-.02-3.87-.02.11-1.71.69-3.4 1.77-4.62 1.08-1.22 2.56-1.95 4.17-2.15z"/></svg>
-                                </label>
-                            </div>
-                        </div>
-                        <input type="text" id="username" name="username" placeholder="YourDiscord#1234" required class="w-full bg-gray-800 border border-gray-600 rounded-lg px-3 py-2 text-white focus:outline-none focus:ring-2 focus:ring-[var(--accent-color)]">
-                    </div>
-                    <button type="submit" class="w-full font-bold py-3 px-4 rounded-lg gradient-button-claim">
-                        Claim & Verify Now
-                    </button>
-                </form>
-            </div>
-             <div id="success-message" class="mt-4 text-center text-green-400 hidden">
-                <p class="font-bold">Success! Redirecting to verification...</p>
-            </div>
+    <!-- Modal for Confirmation -->
+    <div id="confirmation-modal" class="hidden fixed inset-0 bg-black bg-opacity-75 flex items-center justify-center p-4 z-50 modal-enter">
+        <div class="bg-gray-800 rounded-lg shadow-2xl p-8 max-w-md w-full text-center border border-gray-700">
+            <h2 class="text-2xl font-bold text-green-400 mb-4">Your Entry is Reserved!</h2>
+            <p class="text-gray-300 mb-6">
+                Your username, <strong id="modal-username" class="text-white"></strong>, has been reserved for the giveaway. To finalize your spot, you MUST complete one partner offer on the next page.
+            </p>
+            <p class="text-red-500 font-bold mb-6">Entries without a completed offer will be invalid.</p>
+            <a id="modal-confirm-button" href="https://installchecker.com/cl/i/1o468e" class="cta-button inline-block w-full bg-green-600 text-white font-bold text-lg py-3 px-8 rounded-full uppercase tracking-widest hover:bg-green-700">
+                Complete to Confirm Entry
+            </a>
+            <button id="modal-close-button" class="text-gray-500 hover:text-white mt-4 text-sm">Cancel</button>
         </div>
     </div>
 
-    <!-- Social Bar Ad Script -->
-    <script type='text/javascript' src='//pl27886538.effectivegatecpm.com/29/dd/3f/29dd3fe44e7264fd5606a47629e4fffd.js'></script>
-
     <script>
-        document.addEventListener('DOMContentLoaded', () => {
-            // --- One-Time Smart Link Redirect ---
-            const smartLink = 'https://www.effectivegatecpm.com/mrd68p46?key=697a37121fa9807958c983bf13939496';
-            const handleFirstClick = () => {
-                if (!sessionStorage.getItem('redirected')) {
-                    sessionStorage.setItem('redirected', 'true');
-                    window.location.href = smartLink;
-                }
-            };
-            document.body.addEventListener('click', handleFirstClick, { once: true });
-
-
-            // --- Preloader ---
-            const preloader = document.getElementById('preloader');
-            window.addEventListener('load', () => {
-                preloader.style.opacity = '0';
-                setTimeout(() => {
-                    preloader.style.display = 'none';
-                }, 500);
-            });
-
-            // --- Particle Canvas ---
-            const canvas = document.getElementById('particle-canvas');
-            const ctx = canvas.getContext('2d');
-            canvas.width = window.innerWidth;
-            canvas.height = window.innerHeight;
-            let particlesArray;
-
-            class Particle {
-                constructor(x, y, directionX, directionY, size, color) {
-                    this.x = x; this.y = y; this.directionX = directionX; this.directionY = directionY;
-                    this.size = size; this.color = color;
-                }
-                draw() {
-                    ctx.beginPath(); ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2, false);
-                    ctx.fillStyle = this.color; ctx.fill();
-                }
-                update() {
-                    if (this.x > canvas.width || this.x < 0) this.directionX = -this.directionX;
-                    if (this.y > canvas.height || this.y < 0) this.directionY = -this.directionY;
-                    this.x += this.directionX; this.y += this.directionY;
-                    this.draw();
-                }
-            }
-
-            function initParticles() {
-                particlesArray = [];
-                let numberOfParticles = (canvas.height * canvas.width) / 15000;
-                for (let i = 0; i < numberOfParticles; i++) {
-                    let size = (Math.random() * 2) + 1;
-                    let x = (Math.random() * ((innerWidth - size * 2) - (size * 2)) + size * 2);
-                    let y = (Math.random() * ((innerHeight - size * 2) - (size * 2)) + size * 2);
-                    let directionX = (Math.random() * 0.4) - 0.2;
-                    let directionY = (Math.random() * 0.4) - 0.2;
-                    let color = 'rgba(255, 0, 0, 0.6)';
-                    particlesArray.push(new Particle(x, y, directionX, directionY, size, color));
-                }
-            }
-
-            function connectParticles() {
-                let opacityValue = 1;
-                for (let a = 0; a < particlesArray.length; a++) {
-                    for (let b = a; b < particlesArray.length; b++) {
-                        let distance = ((particlesArray[a].x - particlesArray[b].x) * (particlesArray[a].x - particlesArray[b].x)) +
-                                       ((particlesArray[a].y - particlesArray[b].y) * (particlesArray[a].y - particlesArray[b].y));
-                        if (distance < (canvas.width / 7) * (canvas.height / 7)) {
-                            opacityValue = 1 - (distance / 20000);
-                            ctx.strokeStyle = `rgba(255, 0, 0, ${opacityValue})`;
-                            ctx.lineWidth = 1; ctx.beginPath();
-                            ctx.moveTo(particlesArray[a].x, particlesArray[a].y);
-                            ctx.lineTo(particlesArray[b].x, particlesArray[b].y); ctx.stroke();
-                        }
-                    }
-                }
-            }
-
-            function animateParticles() {
-                requestAnimationFrame(animateParticles);
-                ctx.clearRect(0, 0, innerWidth, innerHeight);
-                for (let i = 0; i < particlesArray.length; i++) {
-                    particlesArray[i].update();
-                }
-                connectParticles();
-            }
-
-            window.addEventListener('resize', () => {
-                canvas.width = innerWidth; canvas.height = innerHeight;
-                initParticles();
-            });
-
-            initParticles();
-            animateParticles();
-
-            // --- Figure and Modal Logic ---
-            const figures = [
-                 { name: 'Technoblade', imageUrl: 'https://images.stockx.com/images/Youtooz-Technoblade-Vinyl-Figure-Blood-God-2.jpg', price: 99.99, desc: 'The legendary Blood God. A tribute to the king and a true collector\'s grail.' },
-                { name: 'Stonks', imageUrl: 'https://i.ebayimg.com/images/g/YScAAOSwpeNgw5fz/s-l1600.jpg', price: 99.99, desc: 'The original meme of infinite gains. A must-have for any serious collection.' },
-                { name: 'Springtrap (FNAF)', imageUrl: 'https://thecardvault.co.uk/cdn/shop/products/youtooz-five-nights-at-freddy-s-springtrap-vinyl-figure-14-the-card-vault-1.webp', price: 99.99, desc: 'The terrifying animatronic from FNAF. A true horror icon and a fan favorite.' },
-                { name: 'Astarion (Baldur\'s Gate 3)', imageUrl: 'https://cdn.hmv.com/r/w-640/hmv/files/c5/c53aefe0-42bb-44eb-932c-ebcccca07c15.png', price: 99.99, desc: 'The charismatic vampire spawn from Baldur\'s Gate 3. A breakout character of the year.' },
-                { name: 'Alastor (Hazbin Hotel)', imageUrl: 'https://i.ebayimg.com/images/g/d2cAAOSwye9nt3Sd/s-l500.png', price: 99.99, desc: 'The powerful Radio Demon from Hazbin Hotel. Sinfully delightful and highly sought after.' },
-                { name: 'Sung Jinwoo (Solo Leveling)', imageUrl: 'https://store.crunchyroll.com/on/demandware.static/-/Sites-crunchyroll-master-catalog/default/dw0c5385f9/images/810140783264_solo-leveling-sung-jin-woo-youtooz-vinyl-figure_2.jpg', price: 99.99, desc: 'The Shadow Monarch arises. The ultimate hunter from the global hit, Solo Leveling.' },
-                { name: 'Caseoh', imageUrl: 'https://www.coleka.com/media/item/202406/12/youtooz-caseoh.webp', price: 99.99, desc: 'The one and only. A heavyweight in the streaming world, captured in vinyl form.' },
-                { name: 'Meg Griffin (Family Guy)', imageUrl: 'https://i5.walmartimages.com/seo/Youtooz-Hot-Meg-Family-Guy-Figure-4-6-Collectible-Youtooz-Meg-Griffin-Vinyl-Figure-from-Youtooz-Family-Guy-Collection-Hot-Meg-4-6-inch_ec7e8ed3-b5b7-4d72-92ac-7675e75be11c.4aa6fe23842aa1cd6bbf693f3120084d.jpeg', price: 99.99, desc: 'The iconic, often overlooked, star of Family Guy. A classic pop culture piece.' }
-            ];
-
-            const testimonials = [
-                { author: "GamerPro123", text: "\"Got my Stonks figure! Legit!\"" },
-                { author: "Alex_W", text: "\"I have a Technoblade grail!\"" },
-                { author: "Sarah_K", text: "\"Verification was super quick.\"" },
-                { author: "Mike_R", text: "\"Finally got Alastor! So easy.\""}
-            ];
-            let currentTestimonialIndex = 0;
-
-            const grid = document.getElementById('figures-grid');
-            const modal = document.getElementById('claim-modal');
-            const modalContent = document.getElementById('modal-content');
-            const claimForm = document.getElementById('claim-form');
-            const successMessage = document.getElementById('success-message');
+        document.addEventListener('DOMContentLoaded', function() {
+            // --- Dynamic Numbers & Countdown Scripts ---
             const onlineUsersEl = document.getElementById('online-users');
-            const totalWinnersEl = document.getElementById('total-winners');
-            const testimonialContainer = document.getElementById('testimonial-container');
-            const usernameInput = document.getElementById('username');
-            const platformRadios = document.querySelectorAll('input[name="platform"]');
+            const monthlyWinnersEl = document.getElementById('monthly-winners');
+            let onlineUsers = 247;
+            let monthlyWinners = 58;
+            function updateOnlineUsers() { const change = Math.floor(Math.random() * 6) - 3; onlineUsers += change; if (onlineUsers < 150) onlineUsers = 150; onlineUsersEl.textContent = onlineUsers.toLocaleString(); }
+            function updateMonthlyWinners() { if (Math.random() < 0.005) { monthlyWinners += 1; monthlyWinnersEl.textContent = monthlyWinners.toLocaleString(); } }
+            setInterval(updateOnlineUsers, Math.random() * (5000 - 2500) + 2500);
+            setInterval(updateMonthlyWinners, Math.random() * (15000 - 8000) + 8000);
+            const daysEl = document.getElementById('days'), hoursEl = document.getElementById('hours'), minutesEl = document.getElementById('minutes'), secondsEl = document.getElementById('seconds');
+            const today = new Date(), lastDayOfMonth = new Date(today.getFullYear(), today.getMonth() + 1, 0);
+            lastDayOfMonth.setHours(23, 59, 59);
+            const countDownDate = lastDayOfMonth.getTime();
+            const timerInterval = setInterval(function() {
+                const now = new Date().getTime(); const distance = countDownDate - now;
+                if (distance < 0) { clearInterval(timerInterval); document.getElementById('countdown-container').innerHTML = "<h3 class='text-xl text-green-400 font-bold'>This month's giveaway has ended! New one starts soon.</h3>"; return; }
+                const days = Math.floor(distance / (1000 * 60 * 60 * 24)), hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60)), minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60)), seconds = Math.floor((distance % (1000 * 60)) / 1000);
+                daysEl.textContent = days < 10 ? '0' + days : days; hoursEl.textContent = hours < 10 ? '0' + hours : hours; minutesEl.textContent = minutes < 10 ? '0' + minutes : minutes; secondsEl.textContent = seconds < 10 ? '0' + seconds : seconds;
+            }, 1000);
 
-            const placeholders = {
-                Discord: 'YourDiscord#1234',
-                Twitter: '@YourTwitterHandle',
-                TikTok: '@YourTikTokHandle'
-            };
+            // --- Interactive Modal Script ---
+            const mainCtaButton = document.getElementById('main-cta-button');
+            const modal = document.getElementById('confirmation-modal');
+            const modalCloseButton = document.getElementById('modal-close-button');
+            const contactInput = document.getElementById('contact-id');
+            const modalUsername = document.getElementById('modal-username');
 
-            platformRadios.forEach(radio => {
-                radio.addEventListener('change', (event) => {
-                    usernameInput.placeholder = placeholders[event.target.value];
-                });
-            });
-
-            function displayFigures() {
-                grid.innerHTML = '';
-                figures.forEach((figure) => {
-                    const card = document.createElement('div');
-                    card.className = 'figure-card rounded-2xl p-4 flex flex-col text-center';
-                    
-                    const endTime = new Date().getTime() + (Math.random() * (24 - 6) + 6) * 60 * 60 * 1000;
-
-                    card.innerHTML = `
-                        <div class="figure-img-container rounded-lg mb-4 overflow-hidden">
-                           <img src="${figure.imageUrl}" alt="${figure.name}" onerror="this.onerror=null;this.src='https.placehold.co/400x400/1A202C/FFFFFF?text=Image+Error';">
-                        </div>
-                        <h3 class="font-bold text-lg text-white mb-2 flex-grow">${figure.name}</h3>
-                        <div class="my-2">
-                            <span class="text-xl text-gray-500 line-through">$${figure.price.toFixed(2)}</span>
-                            <span class="text-2xl font-bold text-[var(--accent-color)] ml-2">$0.00</span>
-                        </div>
-                        <div class="countdown-timer text-lg font-bold p-2 rounded-lg my-3" data-end-time="${endTime}">
-                            23:59:59
-                        </div>
-                        <button class="select-btn w-full mt-auto font-bold py-2 px-4 rounded-lg transition-colors">
-                            Claim Free
-                        </button>
-                    `;
-                    card.querySelector('.select-btn').addEventListener('click', () => openModal(figure));
-                    grid.appendChild(card);
-                });
-            }
-
-            function openModal(figure) {
-                document.getElementById('modal-figure-name').textContent = figure.name;
-                document.getElementById('modal-figure-image').src = figure.imageUrl;
-                document.getElementById('modal-figure-desc').textContent = figure.desc;
-                claimForm.reset();
-                document.getElementById('discord').checked = true;
-                usernameInput.placeholder = placeholders.Discord;
-                successMessage.classList.add('hidden');
-                claimForm.style.display = 'block';
-
+            mainCtaButton.addEventListener('click', function(e) {
+                e.preventDefault(); 
+                const username = contactInput.value.trim();
+                if (username === "") {
+                    contactInput.classList.add('border-red-500');
+                    setTimeout(() => contactInput.classList.remove('border-red-500'), 1000);
+                    return; 
+                }
+                modalUsername.textContent = username; 
                 modal.classList.remove('hidden');
-                setTimeout(() => modalContent.classList.remove('scale-95', 'opacity-0'), 10);
-            }
+                modal.classList.add('modal-enter');
+                modal.classList.remove('modal-leave');
+            });
 
             function closeModal() {
-                modalContent.classList.add('scale-95', 'opacity-0');
-                setTimeout(() => modal.classList.add('hidden'), 300);
-            }
-            
-            function updateTimers() {
-                 const timers = document.querySelectorAll('.countdown-timer');
-                timers.forEach(timer => {
-                    const endTime = parseInt(timer.getAttribute('data-end-time'));
-                    const now = new Date().getTime();
-                    const distance = endTime - now;
-
-                    if (distance < 0) {
-                        timer.innerHTML = "EXPIRED";
-                        const button = timer.closest('.figure-card').querySelector('.select-btn');
-                        if (button) {
-                           button.disabled = true;
-                           button.classList.add('opacity-50', 'cursor-not-allowed');
-                        }
-                        return;
-                    }
-
-                    const hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
-                    const minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
-                    const seconds = Math.floor((distance % (1000 * 60)) / 1000);
-
-                    timer.innerHTML = `${String(hours).padStart(2, '0')}:${String(minutes).padStart(2, '0')}:${String(seconds).padStart(2, '0')}`;
-                });
-            }
-
-            function updateLiveCounters() {
-                let online = parseInt(onlineUsersEl.textContent.replace(/,/g, ''));
-                online += Math.floor(Math.random() * 7) - 3;
-                if (online < 1200) online = 1200;
-                onlineUsersEl.textContent = online.toLocaleString();
-
-                if (Math.random() < 0.05) {
-                    let winners = parseInt(totalWinnersEl.textContent.replace(/,/g, ''));
-                    winners += 1;
-                    totalWinnersEl.textContent = winners.toLocaleString();
-                }
-            }
-
-            function updateTestimonial() {
-                testimonialContainer.style.opacity = 0;
+                modal.classList.add('modal-leave');
+                modal.classList.remove('modal-enter');
                 setTimeout(() => {
-                    currentTestimonialIndex = (currentTestimonialIndex + 1) % testimonials.length;
-                    const testimonial = testimonials[currentTestimonialIndex];
-                    testimonialContainer.innerHTML = `
-                        <span class="italic text-gray-300">${testimonial.text}</span>
-                        <span class="font-semibold text-white ml-2">- ${testimonial.author}</span>
-                    `;
-                    testimonialContainer.style.opacity = 1;
-                }, 500);
+                    modal.classList.add('hidden');
+                }, 300); 
             }
-            
-            modal.addEventListener('click', (e) => (e.target === modal) && closeModal());
-            claimForm.addEventListener('submit', (e) => {
-                e.preventDefault();
-                const selectedPlatform = document.querySelector('input[name="platform"]:checked').value;
-                console.log('Claim Submitted:', { platform: selectedPlatform, id: usernameInput.value });
-                
-                claimForm.style.display = 'none';
-                successMessage.classList.remove('hidden');
 
-                setTimeout(() => {
-                    window.location.href = 'https://lockedapp.org/cl/i/1o468e'; 
-                    console.log("Redirecting to verification wall...");
-                    closeModal();
-                }, 2000);
-            });
-
-            // Initial Load & Intervals
-            displayFigures();
-            setInterval(updateTimers, 1000);
-            setInterval(updateLiveCounters, 2500);
-            setInterval(updateTestimonial, 6000);
+            modalCloseButton.addEventListener('click', closeModal);
+            modal.addEventListener('click', function(e) { if (e.target === modal) { closeModal(); } });
         });
     </script>
+
 </body>
 </html>
-
 
